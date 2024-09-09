@@ -23,7 +23,6 @@ RUN wget https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-4.0.3-64bit-st
 
 # Install Lingua Franca HPRM Version
 RUN echo 2
-COPY scripts/install.sh /workspace/
 RUN curl -Ls https://install.lf-lang.org | bash -s cli
 
 # Install RTI
@@ -39,7 +38,6 @@ RUN echo 1
 COPY carla /workspace/
 COPY scripts /workspace/
 COPY serializer /workspace/serializer
-COPY benchmark /workspace/benchmark
 COPY models/ckpt_11833344.pth /workspace/ckpt/ckpt_11833344.pth
 COPY models/yolov5n.pt /workspace/logs/
 
@@ -54,4 +52,4 @@ ENV PYTHONPATH=/workspace/CARLA_0.9.15/PythonAPI/carla/
 # Copy HPRM CARLA example code
 COPY HPRM /workspace/
 
-RUN python modify_config.py --carla_ip="10.41.14.160" --server_controller_url="http://10.41.14.160:2010" --config_file="./config/carla.yaml"
+RUN python modify_config.py --carla_ip="10.41.14.160" --server_controller_url="http://10.41.14.160:2010" --config_file="./config/carla.yaml" && echo 'tmux new -d -s plasma plasma_store -m 4000000000 -s /tmp/plasma' >> ~/.bashrc 
