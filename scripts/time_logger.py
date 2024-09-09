@@ -32,7 +32,7 @@ class TimeLogger():
 
         if(self.frame_count == self.warmup_steps):
             self.t_warmup = t_cur
-        self.pbar.set_description("FPS: {:.2f}".format(self.fps()), refresh=True)
+        self.pbar.set_description("Inferernce Per Second: {:.2f}".format(self.fps()), refresh=True)
         self.pbar.update(1)
 
         if self.frame_count == self.total_steps:
@@ -60,14 +60,14 @@ class TimeLogger():
             pickle.dump(self.marks, f)
     
     def fps(self):
-        if(self.t_warmup and self.frame_count > self.warmup_steps):
-            return (self.frame_count - self.warmup_steps) / (self.t1 - self.t_warmup)
-        return self.frame_count / (self.t1 - self.t0)
+        if len(self.marks)>2:
+            return 1/(self.marks[-1]["start"] - self.marks[-2]["end"])
+        else:
+            return 0
 
     def save_logs(self):
         self.pbar.close()
         path = self.save_dir + "/" + self.name + "_logs.pkl"
-        print(f"Final FPS is {self.fps()} in {self.frame_count} frames. \n")
         print(f"Saving Logs to {path}")
         os.makedirs(os.path.dirname(path), exist_ok=True)
         with open(path, 'wb') as f:
