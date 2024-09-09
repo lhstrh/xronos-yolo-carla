@@ -21,7 +21,7 @@ This repo contains the implementation of the CARLA autonomous driving benchmark 
    ```
 2. Install and use desired serializer by following the instructions [here](https://github.com/Depetrol/Serializers).
 
-## Reproduce CARLA Benchmark in HPRM and ROS2
+## 🔄 Reproduce CARLA Benchmark in HPRM and ROS2
 
 ### CARLA Simulator Server and Controller Setup
 
