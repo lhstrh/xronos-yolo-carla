@@ -1,0 +1,21 @@
+birdview:
+  module: birdview.chauffeurnet
+  width_in_pixels: 192
+  pixels_ev_to_bottom: 32
+  pixels_per_meter: 5.0
+  history_idx: [-16, -11, -6, -1]
+  scale_bbox: true
+  scale_mask_col: 1.0
+central_rgb:
+  module: camera.rgb
+  fov: 100
+  width: 960
+  height: 600
+  location: [-1.5, 0.0, 2.0]
+  rotation: [0.0, 0.0, 0.0]
+speed:
+  module: actor_state.speed
+control:
+  module: actor_state.control
+velocity:
+  module: actor_state.velocity

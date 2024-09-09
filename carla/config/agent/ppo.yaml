@@ -1,0 +1,31 @@
+defaults:
+  - ppo/obs_configs: birdview
+  - ppo/policy: xtma_beta
+
+ppo:
+  entry_point: agents.rl_birdview.rl_birdview_agent:RlBirdviewAgent
+  wb_run_path: null
+  wb_ckpt_step: null
+  env_wrapper:
+    entry_point: agents.rl_birdview.utils.rl_birdview_wrapper:RlBirdviewWrapper
+    kwargs:
+      input_states: [control, vel_xy]
+      acc_as_action: True
+  training:
+    entry_point: agents.rl_birdview.models.ppo:PPO
+    kwargs:
+      learning_rate: 1.0e-05
+      n_steps_total: 12288
+      batch_size: 256
+      n_epochs: 20
+      gamma: 0.99
+      gae_lambda: 0.9
+      clip_range: 0.2
+      clip_range_vf: null
+      ent_coef: 0.01
+      explore_coef: 0.05
+      vf_coef: 0.5
+      max_grad_norm: 0.5
+      target_kl: 0.01
+      update_adv: false
+      lr_schedule_step: 8

@@ -1,0 +1,32 @@
+hydra:
+  run:
+    dir: ./experiments/${exp_name}/${now:%Y-%m-%d}/${now:%H-%M-%S}
+defaults:
+- test_suites: lb_test
+- agent: ppo
+- _self_
+carla_sh_path: /workspace/CARLA_0.9.15/CarlaUE4.sh
+host: 198.18.0.1
+port: 2000
+carla_controller_url: http://198.18.0.1:2010
+total_steps: 500
+warmup_steps: 100
+force_ppo_cpu: true
+log_level: INFO
+log_video: true
+seed: 2021
+no_rendering: true
+actors:
+  hero:
+    agent: ppo
+    reward:
+      entry_point: reward.valeo_action:ValeoAction
+    terminal:
+      entry_point: terminal.leaderboard_dagger:LeaderboardDagger
+      kwargs:
+        no_collision: true
+        no_run_rl: true
+        no_run_stop: false
+agent:
+  ppo:
+    ckpt: /workspace/ckpt/ckpt_11833344.pth

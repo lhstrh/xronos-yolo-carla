@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+**/__pycache__
+**/*.py[cod]
+**/*$py.class
+**/.ipynb_checkpoints/
+**/*.pyc
+
+# Folders
+**/logs/
+**/outputs/
+**/wandb/
+**/weights
+**/ckpt
+
+# Lingua Franca
+**/include
+**/src-gen
+**/bin
+**/fed-gen
+**/*.lft
+
+.git

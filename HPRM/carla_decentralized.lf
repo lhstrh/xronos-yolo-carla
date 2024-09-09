@@ -1,0 +1,174 @@
+target Python {
+    files: carla_agent.py,  # threading: True
+    coordination: decentralized
+  }
+  
+  preamble {=
+      import torch
+      import cv2
+      from carla_agent import game_start, game_step, game_stop, agent_start, agent_action, write_video, hydra_dir, agents_dict, cfg
+      from time_logger import TimeLogger
+      from tqdm import tqdm
+      from time import time
+      from pathlib import Path
+      import carla
+      import statistics
+      import numpy as np
+  =}
+  
+  reactor Carla (STP_offset = 120s)  {
+      input actions
+      output observation
+  
+      state env
+      state list_render
+      state timelogger
+      reaction(startup) -> observation {=
+          self.timelogger = TimeLogger(warmup_steps = cfg.warmup_steps, total_steps = cfg.total_steps, name="lf_decentralized_carla", save_dir=hydra_dir + "/time")
+          self.env, init_obs = game_start()
+          self.timelogger.mark_start()
+          self.list_render = []
+          print("===== Carla Startup =====")
+          self.timelogger.mark_end()
+          observation.set(init_obs)
+          self.timelogger.start()
+          self.inference_total = 0
+      =}
+  
+      reaction(actions) -> observation {=
+          self.timelogger.mark_start()
+          if(actions.value == None):
+              raise Exception("Actions is None")
+          control_dict = {}
+          self.timelogger.log()
+          for actor_id, agent in agents_dict.items():
+              control_dict[actor_id] = carla.VehicleControl(throttle=actions.value[actor_id]["throttle"], steer=actions.value[actor_id]["steer"], brake=actions.value[actor_id]["brake"])
+          obs, reward, done, info, tiled_img, single_img = game_step(self.env, control_dict)
+          
+          if cfg.log_video:
+              self.list_render.append(tiled_img)
+
+          if self.env.timestamp["step"] > cfg.total_steps:
+              if cfg.log_video:
+                  write_video(self.list_render)
+              game_stop(self.env)
+              return
+          self.timelogger.mark_end()
+          observation.set(obs)
+    =}
+  }
+  
+  reactor AI_Agent (STP_offset = 120s)  {
+      input obs
+      output ai_actions
+      state timelogger
+  
+      reaction(startup) {=
+          self.timelogger = TimeLogger(warmup_steps = cfg.warmup_steps, total_steps = cfg.total_steps, name="lf_decentralized_agent", save_dir=hydra_dir + "/time")
+          print("===== Agent Startup =====")
+          agent_start()
+      =} STP (1000s) {==}
+  
+      reaction(obs) -> ai_actions {=
+          self.timelogger.mark_start()
+          control_dict = agent_action(obs.value)
+          for actor_id, agent in agents_dict.items():
+              control_dict[actor_id] = {
+                  "throttle": control_dict[actor_id].throttle,
+                  "steer": control_dict[actor_id].steer,
+                  "brake": control_dict[actor_id].brake,
+          }
+          self.timelogger.mark_end()
+          ai_actions.set(control_dict)
+      =} STP (1000s) {==}
+  }
+  
+  reactor Yolo (STP_offset = 120s)  {
+      input img
+      output yolo_actions
+  
+      state yolo_results
+      state yolo_model
+      state count
+
+      state t0
+      state t_last
+      state out
+      state timelogger
+  
+      reaction(startup) {=
+          print("===== YOLO Startup =====")
+          self.timelogger = TimeLogger(warmup_steps = cfg.warmup_steps, total_steps = cfg.total_steps, name="lf_decentralized_yolo", save_dir=hydra_dir + "/time")
+          self.yolo_model = torch.hub.load("ultralytics/yolov5", "yolov5n", pretrained=True)
+          self.yolo_results = []
+          self.count = 0
+      =} STP (1000s) {==}
+  
+      reaction(img) -> yolo_actions {=
+      self.timelogger.mark_start()
+      result = self.yolo_model(img.value["hero"]["central_rgb"]["data"])
+      if cfg.log_video:
+          self.yolo_results.append(result)
+          frame = result.render()[0]
+          frame_bgr = cv2.cvtColor(frame, cv2.COLOR_RGB2BGR)
+          if(self.count == 0):
+              self.t0 = time()
+              self.t_last = time()
+              height, width, _ = frame_bgr.shape
+              fourcc = cv2.VideoWriter_fourcc(*"mp4v")
+              yolo_path = hydra_dir + "/videos/lf_yolo_decentralized.mp4"
+              print("yolo_path:", yolo_path)
+              self.out = cv2.VideoWriter(yolo_path, fourcc, 25.0, (width, height))
+          t_now = time()
+          t_elapsed = t_now - self.t_last
+          self.t_last = t_now
+          seconds = int(t_now - self.t0)
+          milliseconds = int((t_now - self.t0) * 1000)
+          cv2.putText(frame_bgr, f"Lingua Franca Decentralized", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+          cv2.putText(frame_bgr, f"Wall clock {seconds}s, {1/t_elapsed:.1f} FPS", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+          output = cv2.putText(frame_bgr, f"Total Frames {self.count}", (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+          self.out.write(output)
+          if self.count >=cfg.total_steps-1:
+              self.out.release()
+              cv2.destroyAllWindows()
+              print("==== YOLO LOGGED ====")
+      self.count += 1
+      self.timelogger.mark_end()
+      yolo_actions.set(None)
+    =} STP (1000s) {==}
+  }
+  
+  reactor Fusion (STP_offset = 120s)  {
+      input yolo_actions
+      input ai_actions
+  
+      output final_actions
+      state timelogger
+  
+      reaction(startup) {=
+          print("===== Fusion Startup =====")
+          self.timelogger = TimeLogger(warmup_steps = cfg.warmup_steps, total_steps = cfg.total_steps, name="lf_decentralized_fusion", save_dir=hydra_dir + "/time")
+      =} STP (1000s) {==}
+  
+      reaction(yolo_actions, ai_actions) -> final_actions {=
+          self.timelogger.mark_start()
+          self.timelogger.mark_end()
+          final_actions.set(ai_actions.value)
+      =} STP (1000s) {==}
+  }
+  
+  federated reactor {
+      carla = new Carla()
+      ai_agent = new AI_Agent()
+      yolo = new Yolo()
+      fusion = new Fusion()
+  
+      carla.observation -> ai_agent.obs serializer "custom_serializer"
+      ai_agent.ai_actions -> fusion.ai_actions serializer "custom_serializer"
+  
+      carla.observation -> yolo.img serializer "custom_serializer"
+      yolo.yolo_actions -> fusion.yolo_actions serializer "custom_serializer"
+  
+      fusion.final_actions -> carla.actions after 0
+  }
+  

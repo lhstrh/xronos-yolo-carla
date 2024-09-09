@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+**/__pycache__
+**/*.py[cod]
+**/*$py.class
+**/.ipynb_checkpoints/
+**/*.pyc
+**/*.egg-info
+
+# Folders
+**/logs/
+**/outputs/
+**/wandb/
+**/weights
+**/ckpt
+.vscode
+
+# Carla PythonAPI binding
+CARLA_0.9.15_PythonAPI.tar.gz
+PythonAPI
+
+# Lingua Franca
+**/include
+**/src-gen
+**/bin
+**/fed-gen
+**/*.lft

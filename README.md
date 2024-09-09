@@ -92,7 +92,3 @@ First download `CARLA_0.9.15_PythonAPI.tar.gz` from the Release section of this 
 Thanks to the authors of [Model-Based Imitation Learning for Urban Driving](https://github.com/wayveai/mile) for providing a implementation of the PPO autonomous driving algorithm and corresponding configuration code. We modifyed the code to work with CARLA 0.9.15.
 
 Thanks to the authors of [End-to-End Urban Driving by Imitating a Reinforcement Learning Coach](https://github.com/zhejz/carla-roach) for providing a gym wrapper around CARLA making it easy to use, and the RL expert PPO autonomous driving algorithm.
-
-```text
-curl -Ls https://install.lf-lang.org | bash -s cli
-```
