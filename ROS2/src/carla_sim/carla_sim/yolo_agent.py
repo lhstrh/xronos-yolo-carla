@@ -57,7 +57,7 @@ class YoloAgent(Node):
             seconds = int(t_now - self.t0)
             milliseconds = int((t_now - self.t0) * 1000)
             cv2.putText(frame_bgr, f"ROS2", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
-            cv2.putText(frame_bgr, f"Wall clock {seconds}s, {1/t_elapsed:.1f} FPS", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
+            cv2.putText(frame_bgr, f"Wall clock {seconds}s, {0.0 if self.count<1 else 1/t_elapsed:.1f} FPS", (50, 100), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
             output = cv2.putText(frame_bgr, f"Total Frames {self.count}", (50, 150), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2, cv2.LINE_AA)
             self.out.write(output)
             if self.count >=cfg.total_steps-1:

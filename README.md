@@ -1,9 +1,9 @@
 # HPRM: High-Performance Robotic Middleware for Intelligent Autonomous Systems
+
 [![Website](https://img.shields.io/badge/Website-HPRM-Red)](https://depetrol.github.io/HPRM/)
 [![Github](https://img.shields.io/badge/Github-HPRM-orange)](https://github.com/Depetrol/HPRM)
 [![Docker](https://img.shields.io/badge/DockerHub-HPRM-blue)](https://hub.docker.com/repository/docker/depetrol/hprm/general)
 [![Docker](https://img.shields.io/badge/DockerHub-ROS2-blue)](https://hub.docker.com/repository/docker/depetrol/ros2/general)
-
 
 This repo contains the implementation of the CARLA autonomous driving benchmark for paper HPRM: High-Performance Robotic Middleware for Intelligent Autonomous Systems. All code has been containerized with Docker for reproducability.
 
@@ -81,7 +81,8 @@ This repo contains the implementation of the CARLA autonomous driving benchmark 
 
    1. Start the YOLO object detection node: `source install/setup.bash && ros2 run carla_sim yolo`
    2. Start the PPO autonomous driving node: `source install/setup.bash && ros2 run carla_sim agent`
-   3. Start the CARLA simulation node: `source install/setup.bash && ros2 run carla_sim carla`
+   3. Start the FUSION node: `source install/setup.bash && ros2 run carla_sim fusion`
+   4. Start the CARLA simulation node: `source install/setup.bash && ros2 run carla_sim carla`
 
 ## 🛠️ Build Docker Images
 
