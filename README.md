@@ -4,6 +4,7 @@
 [![Github](https://img.shields.io/badge/Github-HPRM-orange)](https://github.com/Depetrol/HPRM)
 [![Docker](https://img.shields.io/badge/DockerHub-HPRM-blue)](https://hub.docker.com/repository/docker/depetrol/hprm/general)
 [![Docker](https://img.shields.io/badge/DockerHub-ROS2-blue)](https://hub.docker.com/repository/docker/depetrol/ros2/general)
+[![Docker](https://img.shields.io/badge/DockerHub-Xronos-blue)](https://hub.docker.com/repository/docker/depetrol/xronos/general)
 
 This repo contains the implementation of the CARLA autonomous driving benchmark for paper HPRM: High-Performance Robotic Middleware for Intelligent Autonomous Systems. All code has been containerized with Docker for reproducability.
 
