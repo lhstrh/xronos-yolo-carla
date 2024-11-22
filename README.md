@@ -84,6 +84,18 @@ This repo contains the implementation of the CARLA autonomous driving benchmark 
    3. Start the FUSION node: `source install/setup.bash && ros2 run carla_sim fusion`
    4. Start the CARLA simulation node: `source install/setup.bash && ros2 run carla_sim carla`
 
+### Xronos Setup
+
+1. Pull Docker image from Docker Hub: `docker pull depetrol/xronos`
+2. Run a Docker container from the image:
+
+   ```
+   docker run -it --gpus=all --shm-size 12g  --net=host depetrol/xronos
+   ```
+3. Check if the Docker container can connect to the CARLA server controller with provided script: `python server_test.py --server_controller_url http://198.18.0.1:2010`
+4. Modify the config file with script to connect to your CARLA environment: `python modify_config.py --carla_ip="198.18.0.1" --server_controller_url="http://198.18.0.1:2010" --config_file="./config/carla.yaml"`
+5. Run Benchmark with Xronos: `python xronos_carla.py`
+
 ## 🛠️ Build Docker Images
 
 This section is for building the Docker image from source code.
