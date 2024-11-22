@@ -13,7 +13,7 @@ class TimeLogger():
         self.name = name
         self.frame_count = 0
         self.warmup_steps = warmup_steps
-        self.total_steps = total_steps - 2
+        self.total_steps = total_steps - 3
         self.save_dir = save_dir
         self.t_warmup = None
         self.pbar = tqdm(total=total_steps)

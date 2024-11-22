@@ -21,19 +21,6 @@ RUN apt-get install -y openjdk-17-jdk openjdk-17-jre
 # Install ffmpeg 4.0.3
 RUN wget https://www.johnvansickle.com/ffmpeg/old-releases/ffmpeg-4.0.3-64bit-static.tar.xz && tar -xvf ffmpeg-4.0.3-64bit-static.tar.xz && cd ffmpeg-4.0.3-64bit-static && sudo mv ffmpeg /usr/local/bin/ && rm /opt/conda/bin/ffmpeg && rm -r /workspace/ffmpeg-4.0.3-64bit-static && rm /workspace/ffmpeg-4.0.3-64bit-static.tar.xz
 
-# Install Lingua Franca HPRM Version
-RUN echo 2
-RUN curl -Ls https://install.lf-lang.org | bash -s cli
-
-# Install RTI
-RUN git clone https://github.com/lf-lang/reactor-c.git \
-    && cd reactor-c/core/federated/RTI \
-    && mkdir build && cd build \
-    && cmake ../ \
-    && make \
-    && sudo make install
-
-RUN echo 1
 # Copy Code & Model Weights
 COPY carla /workspace/
 COPY scripts /workspace/
@@ -42,14 +29,14 @@ COPY models/ckpt_11833344.pth /workspace/ckpt/ckpt_11833344.pth
 COPY models/yolov5n.pt /workspace/logs/
 
 # Install Out-of-band Serializer
-RUN source ./venv/bin/activate && cd /workspace/serializer && pip3 install -e . && pip install -e . 
+RUN source ./venv/bin/activate && pip install xronos
 
 # Setup Environment Variables 
 ENV MILE_ROOT=/workspace/
 ENV PATH=/root/.local/bin:/workspace/lingua-franca/bin:/workspace/lingua-franca/build/install/lf-cli/bin:$PATH
-ENV PYTHONPATH=/workspace/CARLA_0.9.15/PythonAPI/carla/
+ENV PYTHONPATH=/workspace/CARLA_0.9.15/PythonAPI/carla/PythonAPI
 
 # Copy HPRM CARLA example code
-COPY HPRM /workspace/
+COPY Xronos /workspace/
 
-RUN python modify_config.py --carla_ip="10.41.13.126" --server_controller_url="http://10.41.13.126:2010" --config_file="./config/carla.yaml" && echo 'tmux new -d -s plasma plasma_store -m 4000000000 -s /tmp/plasma' >> ~/.bashrc 
+RUN python modify_config.py --carla_ip="10.41.13.126" --server_controller_url="http://10.41.13.126:2010" --config_file="./config/carla.yaml"
