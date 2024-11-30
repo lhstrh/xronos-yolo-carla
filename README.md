@@ -49,7 +49,7 @@ This repo contains the implementation of the CARLA autonomous driving benchmark 
 2. Run a Docker container from the image:
 
    ```
-   docker run -it --gpus=all --shm-size 12g  --net=host depetrol/hprm
+   docker run -it --gpus=all --shm-size 12g -v ./logs:/workspace/logs --net=host depetrol/hprm
    ```
 
    This will do the following:
@@ -70,7 +70,7 @@ This repo contains the implementation of the CARLA autonomous driving benchmark 
 2. Run a Docker container from the image:
 
    ```
-   docker run -it --gpus=all --shm-size 12g  --net=host depetrol/ros2
+   docker run -it --gpus=all --shm-size 12g -v ./logs:/workspace/logs --net=host depetrol/ros2
    ```
 3. Check if the Docker container can connect to the CARLA server controller with provided script: `python server_test.py --server_controller_url http://198.18.0.1:2010`
 4. Modify the config file with script: `python modify_config.py --carla_ip="198.18.0.1" --server_controller_url="http://198.18.0.1:2010" --config_file="./src/carla_sim/carla_sim/config/carla.yaml"`

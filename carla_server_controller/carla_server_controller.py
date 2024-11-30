@@ -43,7 +43,7 @@ def kill_process_on_port(port):
 def start_program(exe_path, params):
     print("Starting Carla Server with params: ", params)
     try:
-        subprocess.Popen(exe_path + ' ' + params)
+        subprocess.Popen(exe_path + ' ' + params, shell=True)
         print(f"Started program: {exe_path}")
     except FileNotFoundError:
         print(f"Error: File not found at {exe_path}")
