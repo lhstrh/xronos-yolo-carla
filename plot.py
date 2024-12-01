@@ -37,5 +37,11 @@ labels = [
 plt.figure(figsize=(8, 5), dpi=300)
 plt.boxplot(data, labels=labels)
 plt.ylabel('Inference Latency (ms)')
+plt.yscale('log')
+y_ticks = [10, 20, 40, 80, 160, 320]
+plt.yticks(y_ticks, [str(tick) for tick in y_ticks])
+
+means = [np.mean(dat) for dat in data]
+
 plt.savefig("./logs/latency_plot.png", bbox_inches='tight') 
-print([f'{np.mean(dat):.2f}' for dat in data])
+print(means)
