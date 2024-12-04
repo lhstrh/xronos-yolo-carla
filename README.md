@@ -1,7 +1,7 @@
 # HPRM: High-Performance Robotic Middleware for Intelligent Autonomous Systems
 
-[![Website](https://img.shields.io/badge/Website-HPRM-Red)](https://depetrol.github.io/HPRM/)
-[![Github](https://img.shields.io/badge/Github-HPRM-orange)](https://github.com/Depetrol/HPRM)
+[![Website](https://img.shields.io/badge/Website-HPRM-green)](https://depetrol.github.io/HPRM/)
+[![Arxiv](https://img.shields.io/badge/Arxiv-HPRM-red)](https://arxiv.org/abs/2412.01799)
 [![Docker](https://img.shields.io/badge/DockerHub-HPRM-blue)](https://hub.docker.com/repository/docker/depetrol/hprm/general)
 [![Docker](https://img.shields.io/badge/DockerHub-ROS2-blue)](https://hub.docker.com/repository/docker/depetrol/ros2/general)
 [![Docker](https://img.shields.io/badge/DockerHub-Xronos-blue)](https://hub.docker.com/repository/docker/depetrol/xronos/general)
