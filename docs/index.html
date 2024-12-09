@@ -4,17 +4,17 @@
   <meta charset="utf-8">
   <!-- Meta tags for social media banners, these should be filled in appropriatly as they are your "business card" -->
   <!-- Replace the content tag with appropriate information -->
-  <meta name="description" content="HPRM Project Website">
+  <meta name="description" content="Real-time autonomous driving simulation: Xronos vs. ROS2">
   <!-- <meta property="og:title" content="SOCIAL MEDIA TITLE TAG"/>
   <meta property="og:description" content="SOCIAL MEDIA DESCRIPTION TAG TAG"/> -->
-  <meta property="og:url" content="https://depetrol.github.io/HPRM/"/>
+  <meta property="og:url" content="https://lhstrh.github.io/xronos-yolo-carla/"/>
 
   <!-- Keywords for your paper to be indexed by-->
-  <meta name="keywords" content="HPRM High Performance Robotic Middleware Lingua Franca Shared Memory Zero Copy">
+  <meta name="keywords" content="autonomous driving simulation Xronos ROS2 robotics sdk performance realtime">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-  <title>HPRM: High-Performance Robotic Middleware for Intelligent Autonomous Systems</title>
+  <title>Real-time autonomous driving simulation: Xronos vs. ROS2</title>
   <link rel="icon" type="image/x-icon" href="static/images/favicon.svg">
   <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
   rel="stylesheet">
@@ -42,19 +42,12 @@
       <div class="container is-max-desktop">
         <div class="columns is-centered">
           <div class="column has-text-centered">
-            <h1 class="title is-1 publication-title">HPRM: High-Performance Robotic Middleware for Intelligent Autonomous Systems</h1>
+            <h1 class="title is-1 publication-title">Xronos: A High-Performance Robotics SDK</h1>
             <div class="is-size-5 publication-authors">
               <!-- Paper authors -->
-              <span class="author-block"><a href="https://github.com/jackyk02" target="_blank">Jacky Kwok</a>,</span>
-              <span class="author-block"><a href="https://github.com/Depetrol" target="_blank">Shulu Li</a>,</span>
-              <span class="author-block"><a href="https://www.linkedin.com/in/marten-lohstroh/" target="_blank">Marten Lohstroh</a>,</span>
-              <span class="author-block"><a href="https://ptolemy.berkeley.edu/~eal/" target="_blank">Edward A. Lee</a></span>
+              <span class="author-block"><a href="https://github.com/Depetrol" target="_blank">Shulu Li</a> (UC Berkeley),</span>
+              <span class="author-block"><a href="https://www.linkedin.com/in/marten-lohstroh/" target="_blank">Marten Lohstroh</a> (Xronos Inc.)</span>
             </div>
-
-                  <div class="is-size-5 publication-authors">
-                    <span class="author-block">UC Berkeley<br></span>
-                    <!-- <span class="eql-cntrb"><small><br><sup>*</sup>Indicates Equal Contribution</small></span> -->
-                  </div>
 
                   <div class="column has-text-centered">
                     <div class="publication-links">
@@ -82,7 +75,7 @@
 
                   <!-- Github link -->
                   <span class="link-block">
-                    <a href="https://github.com/Depetrol/HPRM" target="_blank"
+                    <a href="https://github.com/lhstrh/xronos-yolo-carla/" target="_blank"
                     class="external-link button is-normal is-rounded is-dark">
                     <span class="icon">
                       <i class="fab fa-github"></i>
@@ -91,14 +84,14 @@
                   </a>
                 </span>
 
-                <!-- ArXiv abstract Link -->
+                <!-- Link to Python package -->
                 <span class="link-block">
-                  <a href="https://arxiv.org/abs/2412.01799" target="_blank"
+                  <a href="https://pypi.org/project/xronos/" target="_blank"
                   class="external-link button is-normal is-rounded is-dark">
                   <span class="icon">
-                    <i class="ai ai-arxiv"></i>
+                    <i class="fab fa-python"></i>
                   </span>
-                  <span>arXiv</span>
+                  <span>pip install xronos</span>
                 </a>
               </span>
             </div>
@@ -120,7 +113,7 @@
         type="video/mp4">
       </video>
       <h2 class="subtitle has-text-centered">
-        Real-time autonomous driving simulation comparison using ROS2 and HPRM
+        Real-time autonomous driving simulation: Xronos vs. ROS2
       </h2>
     </div>
   </div>
@@ -135,7 +128,9 @@
         <h2 class="title is-3">Abstract</h2>
         <div class="content has-text-justified">
           <p>
-            The rise of intelligent autonomous systems, especially in robotics and autonomous agents, has created a critical need for robust communication middleware that can ensure real-time processing of extensive sensor data. Current robotics middleware like Robot Operating System (ROS) 2 faces challenges with nondeterminism and high communication latency when dealing with large data across multiple subscribers on a multi-core compute platform. To address these issues, we present High-Performance Robotic Middleware (HPRM), built on top of the deterministic coordination language Lingua Franca (LF). HPRM employs optimizations including an in-memory object store for efficient zero-copy transfer of large payloads, adaptive serialization to minimize serialization overhead, and an eager protocol with real-time sockets to reduce handshake latency. Benchmarks show HPRM achieves up to 173x lower latency than ROS2 when broadcasting large messages to multiple nodes. We then demonstrate the benefits of HPRM by integrating it with the CARLA simulator and running reinforcement learning agents along with object detection workloads. In the CARLA autonomous driving application, HPRM attains 91.1% lower latency than ROS2. The deterministic coordination semantics of HPRM, combined with its optimized IPC mechanisms, enable efficient and predictable real-time communication for intelligent autonomous systems.
+            ROS2 requires software components to be organized as "nodes," which are concurrent system processes that communicate via publish-subscribe. The inter-process communication required by ROS2 imposes a lot of overhead, even when all nodes are running on the same host. Xronos, on the other hand, allows for concurrent components to exist within the same system process, through the use of threads an sophisticated scheduler. This obviates the need for zero-copy distributed shared-memory optimizations, because the threads already use shared memory. Not only is does Xronos ensure that data dependencies between component are observed automatically, meaning that the resulting behavior is deterministic, the performance is also significantly better than ROS2, even in comparison to ROS2 with shared memory optimizations.
+            
+            We demonstrate the benefits of Xronos by integrating it with the CARLA simulator and running reinforcement learning agents along with object detection workloads. In the CARLA autonomous driving application, Xronos attains 14x lower latency than regular ROS2, and 2x lower latency compared to ROS2 with shared memory optimizations. The deterministic semantics of Xronos, combined with its highly efficient inter-component communication, enables efficient and predictable real-time communication for intelligent autonomous systems.
           </p>
         </div>
       </div>
@@ -144,31 +139,46 @@
 </section>
 <!-- End paper abstract -->
 
+<section class="hero teaser"></section>
+<div class="container is-max-desktop">
+    <div class="hero-body">
+        <img src="static/images/carla_benchmark.png" alt="overhead" height="100%">
+        <h2 class="subtitle has-text-centered">
+                Diagram of the autonomous driving application
+        </h2>
+    </div>
+</div>
+</section>
+
+<section class="hero teaser"></section>
+    <div class="container is-max-desktop">
+        <div class="hero-body">
+            <img src="static/images/xronos-frames-over-time.png" alt="overall" height="100%">
+            <h2 class="subtitle has-text-centered">
+                Number of frames processed over time
+            </h2>
+        </div>
+    </div>
+</section>
+
+
 <section class="hero teaser">
     <div class="container is-max-desktop">
         <div class="hero-body is-flex is-justify-content-center">
-            <img src="static/images/plasma.png" alt="overhead" style="height: 100%;">
+            <img src="static/images/xronos-inference-latency.png" alt="latency" style="height: 100%;">
         </div>
         <h2 class="subtitle has-text-centered">
-            Comparison of delay in writing NumPy arrays to shared memory
+            Time it takes to run one round of inference (lower is better)
         </h2>
     </div>
 </section>
 
-<section class="hero is-empty">
-    <div class="container is-max-desktop">
-        <div class="hero-body">
-            <!-- Empty block -->
-        </div>
-    </div>
-</section>
-
 <section class="hero teaser">
     <div class="container is-max-desktop">
         <div class="hero-body">
-            <img src="static/images/overhead.png" alt="overhead" height="100%">
+            <img src="static/images/xronos-inference-throughput.png" alt="throughput" height="100%">
             <h2 class="subtitle has-text-centered">
-                Mean latency of broadcast and gather on 4 nodes with different object sizes
+                Average number of inferences per second (higher is better)
             </h2>
         </div>
     </div>
@@ -177,36 +187,13 @@
 <section class="hero teaser"></section>
     <div class="container is-max-desktop">
         <div class="hero-body">
-            <img src="static/images/Serialization_Benchmark_log.png" alt="overhead" height="100%">
+            <img src="static/images/xronos-frame-per-sec.png" alt="frames" height="100%">
             <h2 class="subtitle has-text-centered">
-                The serialization and deserialization throughput of ROS2 Numpy Package, in-band serialization, and out-of-band serialization
+                Number of frames handled per second (higher is better)
             </h2>
         </div>
     </div>
 </section>
-
-<section class="hero teaser"></section>
-    <div class="container is-max-desktop">
-        <div class="hero-body">
-            <img src="static/images/carla_benchmark.png" alt="overhead" height="100%">
-            <h2 class="subtitle has-text-centered">
-                Dataflow diagram of the autonomous driving application
-            </h2>
-        </div>
-    </div>
-</section>
-
-<section class="hero teaser"></section>
-    <div class="container is-max-desktop">
-        <div class="hero-body">
-            <img src="static/images/CARLA_Benchmark_Latency.png" alt="overhead" height="100%">
-            <h2 class="subtitle has-text-centered">
-                Performance of HPRM and ROS2 on the CARLA benchmark
-            </h2>
-        </div>
-    </div>
-</section>
-
 
 <!-- Youtube video -->
 <!-- <section class="hero is-small is-light">
@@ -227,23 +214,18 @@
 <!-- End youtube video -->
 
 
-<!-- Paper poster -->
-<!-- <section class="hero is-small is-light">
+<section class="hero is-small is-light">
   <div class="hero-body">
     <div class="container">
-      <h2 class="title">Poster</h2>
-
-      <iframe  src="static/pdfs/sample.pdf" width="100%" height="550">
-          </iframe>
+      <h2 class="title">🙌 Credits</h2>
+        FIXME
         
       </div>
     </div>
-  </section> -->
-<!--End paper poster -->
-
+  </section>
 
 <!--BibTex citation -->
-  <section class="section" id="BibTeX">
+<!--  <section class="section" id="BibTeX">
     <div class="container is-max-desktop content">
       <h2 class="title">BibTeX</h2>
       <pre><code>
@@ -258,7 +240,7 @@
 }
       </code></pre>
     </div>
-</section>
+</section> -->
 <!--End BibTex citation -->
 
 
