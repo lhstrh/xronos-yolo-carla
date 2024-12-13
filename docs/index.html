@@ -129,8 +129,8 @@
         <div class="content has-text-justified">
           <p>
             ROS2 requires software components to be organized as "nodes," which are concurrent system processes that communicate via publish-subscribe. The inter-process communication required by ROS2 imposes a lot of overhead, even when all nodes are running on the same host. Xronos, on the other hand, allows for concurrent components to exist within the same system process, through the use of threads coordinated automatically by a sophisticated runtime system. This obviates the need for zero-copy distributed shared-memory optimizations, because the threads already use shared memory. Not only does Xronos ensure that data dependencies between components are observed automatically—so the resulting behavior is deterministic—the performance is also significantly better than ROS2, even in comparison to ROS2 with shared-memory optimizations.
-            
-            This benchmark demonstrates the benefits of Xronos by integrating it with the CARLA simulator and running reinforcement learning agents along with object detection workloads. In the CARLA autonomous driving application, Xronos attains 14x lower latency than regular ROS2, and 2x lower latency than ROS2 with shared memory optimizations. The deterministic semantics of Xronos, combined with its highly efficient communication through shared memory, enables efficient and predictable real-time communication for intelligent autonomous systems.
+          </p><p>
+            This benchmark demonstrates the performance benefits of Xronos by integrating it with the CARLA simulator and running reinforcement learning agents along with object detection workloads. In the CARLA autonomous driving application, Xronos attains 14x lower latency than regular ROS2, and 2x lower latency than ROS2 with shared memory optimizations. The deterministic semantics of Xronos, combined with its highly efficient communication through shared memory, enables efficient and predictable real-time communication for intelligent autonomous systems.
           </p>
         </div>
       </div>
@@ -218,8 +218,9 @@
   <div class="hero-body">
     <div class="container">
       <h2 class="title">🙌 Credits</h2>
-        FIXME
-        
+        <p>
+        These benchmarks are based on the work done by <a href="https://github.com/jackyk02" target="_blank">Jacky Kwok</a> and <a href="https://github.com/Depetrol" target="_blank">Shulu Li</a>, who adapted the federated execution capability of Lingua Franca to make use of and in-memory object store for efficient zero-copy transfer of large message payloads between federates. Please refer to their paper <a href="https://arxiv.org/abs/2412.01799">HPRM: High-Performance Robotic Middleware for Intelligent Autonomous Systems</a> for more background, and go the <a href="https://depetrol.github.io/HPRM/" target="_blank">HPRM website</a> for overview of their results. The results achieved with Xronos, on the other hand, are not federated, so there is no inter-process communication involved.
+        </p>
       </div>
     </div>
   </section>
