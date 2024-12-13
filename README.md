@@ -1,33 +1,29 @@
-# HPRM: High-Performance Robotic Middleware for Intelligent Autonomous Systems
+# Xronos: A High-Performance Robotics SDK
 
-[![Website](https://img.shields.io/badge/Website-HPRM-green)](https://depetrol.github.io/HPRM/)
-[![Arxiv](https://img.shields.io/badge/Arxiv-HPRM-red)](https://arxiv.org/abs/2412.01799)
+[![Benchmarks](https://img.shields.io/badge/Xronos-Benchmarks-green)](https://lhstrh.github.io/xronos-yolo-carla)
+[![Docker](https://img.shields.io/badge/DockerHub-Xronos-blue)](https://hub.docker.com/repository/docker/depetrol/xronos/general)
 [![Docker](https://img.shields.io/badge/DockerHub-HPRM-blue)](https://hub.docker.com/repository/docker/depetrol/hprm/general)
 [![Docker](https://img.shields.io/badge/DockerHub-ROS2-blue)](https://hub.docker.com/repository/docker/depetrol/ros2/general)
-[![Docker](https://img.shields.io/badge/DockerHub-Xronos-blue)](https://hub.docker.com/repository/docker/depetrol/xronos/general)
 
-This repo contains the implementation of the CARLA autonomous driving benchmark for paper HPRM: High-Performance Robotic Middleware for Intelligent Autonomous Systems. All code has been containerized with Docker for reproducability.
+This repo contains a CARLA autonomous driving benchmark for [Xronos](https://github.com/xronos-inc/xronos), a Python-based reactor SDK for scientific computing, machine learning, robotics, mechatronics and automation. 
+
+It builds on the repo that hosts the code for reproducing the results of the [HPRM: High-Performance Robotic Middleware for Intelligent Autonomous Systems](https://depetrol.github.io/HPRM/) paper.
+
+All code has been containerized with Docker for reproducability.
+
 
 ## 🏛️ Repo Structure
 
-* `/HPRM`: Code for building HPRM docker image.
-* `/ROS2`: Code for building ROS2 docker image.
+* `/Xronos`: Code for building the Xronos docker image.
+* `/HPRM`: Code for building the HPRM docker image.
+* `/ROS2`: Code for building the ROS2 docker image.
 * `/carla_server_controller`: Because Carla uses a server-client architecture, and `carla_server_controller` serves as a utility tool to control the startup and shutdown of the carla server.
 * `/models`: Model weights
   * `ckpt_11833344.pth` for the autonomous driving algorithm.
   * `yolov5n.pt` for the YOLO object detection algorithm.
 * `/CARLA_0.9.15_PythonAPI.tar.gz` for Carla PythonAPI bindings.
 
-## 🚀 HPRM For Your Application
-
-1. Install latest version of Lingua Franca
-
-   ```bash
-   curl -Ls https://install.lf-lang.org | bash -s cli
-   ```
-2. Install and use desired serializer by following the instructions [here](https://github.com/Depetrol/Serializers).
-
-## 🔄 Reproduce CARLA Benchmark in HPRM and ROS2
+## 🔄 Reproduce CARLA Benchmark in Xronos, HPRM, and ROS2
 
 ### CARLA Simulator Server and Controller Setup
 
@@ -44,26 +40,17 @@ This repo contains the implementation of the CARLA autonomous driving benchmark 
 
    copy the second URL as it will be used to connect the Docker container to the server controller. The following setup will use http://198.18.0.1:2010 as the server URL, please **substitute with your network URL**.
 
-### HPRM Setup
+### Xronos Setup
 
-1. Pull Docker image from Docker Hub: `docker pull depetrol/hprm`
+1. Pull Docker image from Docker Hub: `docker pull depetrol/xronos`
 2. Run a Docker container from the image:
 
    ```
-   docker run -it --gpus=all --shm-size 12g  --net=host -v ./logs:/workspace/logs depetrol/hprm
+   docker run -it --gpus=all --shm-size 12g --net=host -v ./logs:/workspace/logs depetrol/xronos
    ```
-
-   This will do the following:
-
-   - Start the bash shell in interactive mode, with access to all GPUs(if the drivers are configured correctly).
-   - Allow the max memory used by the docker image to be 12 GB.
-   - Share the network stack of the host with the container. This allows the container to connect to the CARLA server and the server controller.
 3. Check if the Docker container can connect to the CARLA server controller with provided script: `python server_test.py --server_controller_url http://198.18.0.1:2010`
 4. Modify the config file with script to connect to your CARLA environment: `python modify_config.py --carla_ip="198.18.0.1" --server_controller_url="http://198.18.0.1:2010" --config_file="./config/carla.yaml"`
-5. Compile and run HPRM:
-
-   - centralized version: `lfc carla_centralized.lf && ./bin/carla_centralized`
-   - decentralized version: `lfc carla_decentralized.lf && ./bin/carla_decentralized`
+5. Run Benchmark with Xronos: `python xronos_carla.py`
 
 ### ROS2 Setup
 
@@ -85,17 +72,26 @@ This repo contains the implementation of the CARLA autonomous driving benchmark 
    3. Start the FUSION node: `source install/setup.bash && ros2 run carla_sim fusion`
    4. Start the CARLA simulation node: `source install/setup.bash && ros2 run carla_sim carla`
 
-### Xronos Setup
+### HPRM Setup
 
-1. Pull Docker image from Docker Hub: `docker pull depetrol/xronos`
+1. Pull Docker image from Docker Hub: `docker pull depetrol/hprm`
 2. Run a Docker container from the image:
 
    ```
-   docker run -it --gpus=all --shm-size 12g --net=host -v ./logs:/workspace/logs depetrol/xronos
+   docker run -it --gpus=all --shm-size 12g  --net=host -v ./logs:/workspace/logs depetrol/hprm
    ```
+
+   This will do the following:
+
+   - Start the bash shell in interactive mode, with access to all GPUs(if the drivers are configured correctly).
+   - Allow the max memory used by the docker image to be 12 GB.
+   - Share the network stack of the host with the container. This allows the container to connect to the CARLA server and the server controller.
 3. Check if the Docker container can connect to the CARLA server controller with provided script: `python server_test.py --server_controller_url http://198.18.0.1:2010`
 4. Modify the config file with script to connect to your CARLA environment: `python modify_config.py --carla_ip="198.18.0.1" --server_controller_url="http://198.18.0.1:2010" --config_file="./config/carla.yaml"`
-5. Run Benchmark with Xronos: `python xronos_carla.py`
+5. Compile and run HPRM:
+
+   - centralized version: `lfc carla_centralized.lf && ./bin/carla_centralized`
+   - decentralized version: `lfc carla_decentralized.lf && ./bin/carla_decentralized`
 
 ## 🛠️ Build Docker Images
 

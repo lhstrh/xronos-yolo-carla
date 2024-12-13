@@ -13,6 +13,10 @@ body {
     margin-bottom: 5px;
 }
 
+.underline{
+    text-decoration: underline;
+}
+
 .dnerf {
   font-variant: small-caps;
 }
